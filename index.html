@@ -460,8 +460,8 @@ function parseMoney(raw){
 function detectPessoa(cpfcnpj){
   if(!cpfcnpj||cpfcnpj.trim()===''||cpfcnpj==='-') return '?';
   const d=cpfcnpj.replace(/\D/g,'');
-  if(d.length===11) return 'PF';
-  if(d.length===14) return 'PJ';
+  if(d.length===10||d.length===11) return 'PF';          // CPF (11 ou sem zero líder)
+  if(d.length>=12&&d.length<=15)   return 'PJ';          // CNPJ (14 ou sem zeros líderes)
   return '?';
 }
 function extractParcelas(obs){
