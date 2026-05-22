@@ -494,7 +494,8 @@ function kill(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
 async function loadData(){
   setStatus('loading');
   try {
-    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+    const tql=encodeURIComponent("select * where F is not null and Q is not null");
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&tq=${tql}`;
     const res=await fetch(url);
     const text=await res.text();
     const json=JSON.parse(text.slice(text.indexOf('{'),text.lastIndexOf('}')+1));
@@ -529,6 +530,7 @@ async function loadData(){
         sdr:         gStr(c,'SDR'),
         closer:      gStr(c,'CLOSER'),
         honorarios:  gNum(c,'HONORÁRIOS INICIAIS'),
+        entrada:     gNum(c,'VALOR DA ENTRADA'),
         tipoPgto:    gStr(c,'TIPO DE PAGAMENTO'),
         cliente:     gStr(c,'CLIENTE (O MESMO DO CONTRATO)'),
         cpfcnpj:     cpfcnpj,
@@ -620,6 +622,7 @@ function render(){
 function renderGeral(d){
   const tot=d.length;
   const totH=sum(d,'honorarios');
+  const totE=sum(d,'entrada');
   const ticket=tot?totH/tot:0;
   const avgJ=avg(d.filter(r=>r.jornada>0),'jornada');
   const avgDf=avg(d.filter(r=>r.diasFechar>0),'diasFechar');
@@ -630,6 +633,7 @@ function renderGeral(d){
   const items=[
     {l:'Total de Clientes',      v:N(tot),          u:'',     s:'contratos no período',           g:false},
     {l:'Total em Honorários',    v:R$(totH),         u:'',     s:'honorários iniciais acumulados', g:true},
+    {l:'Honorários de Entrada',  v:R$(totE),         u:'',     s:'valor de entrada acumulado',     g:true},
     {l:'Ticket Médio',           v:R$(ticket),       u:'',     s:'por cliente no período',         g:true},
     {l:'Jornada Completa Média', v:N(avgJ,1),        u:'dias', s:'1º contato → fechamento',        g:false},
     {l:'Dias para Fechar',       v:N(avgDf,1),       u:'dias', s:'da reunião ao fechamento',       g:false},
