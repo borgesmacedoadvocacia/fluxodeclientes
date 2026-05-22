@@ -428,8 +428,8 @@ td.center { text-align: center; }
 // ═══════════════════════════════════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════════════════════════════════
-const SHEET_ID = '1FWbG3Xuo8TjFfi0puF6E9GFsXrUb6fRdollTfq9-4Dg';
-const GID      = '0';
+const SHEET_ID   = '1FWbG3Xuo8TjFfi0puF6E9GFsXrUb6fRdollTfq9-4Dg';
+const SHEET_NAME = 'DADOS';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  STATE
@@ -494,7 +494,7 @@ function kill(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
 async function loadData(){
   setStatus('loading');
   try {
-    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}`;
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
     const res=await fetch(url);
     const text=await res.text();
     const json=JSON.parse(text.slice(text.indexOf('{'),text.lastIndexOf('}')+1));
