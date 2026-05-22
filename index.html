@@ -37,8 +37,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
 .logo-wrap { display: flex; align-items: center; gap: 16px; }
 .logo-badge {
   height: 46px;
-  width: 50px;
-  overflow: hidden;
   flex-shrink: 0;
   display: block;
 }
@@ -517,7 +515,7 @@ async function loadData(){
 
     allRows=rows.map(row=>{
       const c=row.c||[];
-      const d1=gDate(c,'1º CONTATO')||gDate(c,'DATA DO FECHAMENTO');
+      const d1=gDate(c,'DATA DO FECHAMENTO')||gDate(c,'1º CONTATO');
       const cpfcnpj=gStr(c,'CPF/CNPJ');
       const obs=gStr(c,'OBSERVAÇÕES');
       return {
