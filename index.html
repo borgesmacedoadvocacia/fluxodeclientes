@@ -117,7 +117,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
 .stitle::after { content:''; flex:1; height:1px; background:var(--border); }
 
 /* ── KPI CARDS ── */
-.kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; }
 .kcard {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -218,16 +218,47 @@ td.center { text-align: center; }
 
 /* ── RESPONSIVE ── */
 @media(max-width:1200px){
-  .kpi-row { grid-template-columns: repeat(3,1fr); }
+  .kpi-row { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
   .g64,.g46 { grid-template-columns:1fr; }
+  .g3 { grid-template-columns: 1fr 1fr; }
 }
 @media(max-width:768px){
-  .kpi-row { grid-template-columns: repeat(2,1fr); }
   .g2,.g3  { grid-template-columns:1fr; }
   .header-center { display:none; }
   .content { padding: 18px 16px; }
-  .filters { padding: 10px 16px; }
+  .filters { padding: 10px 16px; gap: 10px; flex-wrap: wrap; }
   .header  { padding: 0 16px; }
+  .tcard { overflow-x: auto; }
+  table { min-width: 520px; }
+  .fbtn { padding: 6px 12px; min-height: 34px; }
+  .reload-btn { padding: 6px 12px; min-height: 34px; }
+  .kcard { padding: 16px 14px; }
+  .ccard { padding: 14px 16px; }
+  .stitle { margin-top: 28px; }
+}
+@media(max-width:480px){
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kvalue { font-size: 18px; }
+  .kcard { padding: 14px 12px; }
+  .klabel { font-size: 8.5px; }
+  .ksub { font-size: 9px; }
+  .header { height: auto; min-height: 56px; padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+  #loading-bar { top: 56px; }
+  .logo-name { font-size: 11px; letter-spacing: 2px; }
+  .logo-tagline { display: none; }
+  .logo-sep { display: none; }
+  .logo-badge img { height: 36px; }
+  .header-right { font-size: 10px; gap: 6px; }
+  .status-dot { width: 6px; height: 6px; }
+  .reload-btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  #status-label { max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .content { padding: 14px 12px; }
+  .filters { padding: 8px 12px; gap: 8px; flex-direction: column; align-items: flex-start; }
+  .filter-group { flex-wrap: wrap; }
+  .stitle { font-size: 8px; margin-top: 24px; }
+  .cmp-type { font-size: 20px; }
+  .cmp-val { font-size: 13px; }
+  .footer { padding: 14px 16px; font-size: 8.5px; letter-spacing: 1px; }
 }
 </style>
 </head>
