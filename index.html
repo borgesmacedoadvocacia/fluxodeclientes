@@ -169,6 +169,9 @@ th {
 td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(196,160,40,0.04); }
+tr.tr-sel td { background: rgba(196,160,40,0.12); }
+tr.tr-sel:hover td { background: rgba(196,160,40,0.18); }
+tr.tr-clickable { cursor: pointer; }
 td.right { text-align: right; }
 td.center { text-align: center; }
 
@@ -487,6 +490,8 @@ let allRows   = [];
 let selYear   = 'all';
 let selMonth  = 'all';
 let selProduto = 'all';
+let selOrigem  = 'all';
+let _origensMap = [];
 const charts  = {};
 
 const MES_NOME = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -659,8 +664,14 @@ function getData(){
     if(selYear!=='all'&&String(r.year)!==selYear) return false;
     if(selMonth!=='all'&&String(r.month)!==selMonth) return false;
     if(selProduto!=='all'&&r.produto!==selProduto) return false;
+    if(selOrigem!=='all'&&r.origem!==selOrigem) return false;
     return true;
   });
+}
+function setOrigem(i){
+  const o=_origensMap[i];
+  selOrigem=(selOrigem===o)?'all':o;
+  render();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -720,12 +731,14 @@ function renderOrigem(d){
   const rows=Object.entries(grp).sort((a,b)=>sum(b[1],'honorarios')-sum(a[1],'honorarios'));
   const totH=sum(d,'honorarios');
   document.getElementById('orig-cnt').textContent=rows.length+' canais';
-  document.getElementById('tbody-origem').innerHTML=rows.map(([o,recs])=>{
+  _origensMap=rows.map(([k])=>k);
+  document.getElementById('tbody-origem').innerHTML=rows.map(([o,recs],i)=>{
     const t=sum(recs,'honorarios'), pct=totH?t/totH*100:0;
     const dfArr=recs.filter(r=>r.diasFechar>0);
     const conf=recs.filter(r=>r.confirmado&&r.confirmado.toLowerCase().includes('sim')).length;
-    return`<tr>
-      <td><span class="badge bmuted">${o}</span></td>
+    const sel=selOrigem===o;
+    return`<tr class="tr-clickable${sel?' tr-sel':''}" onclick="setOrigem(${i})" title="${sel?'Clique para remover filtro':'Clique para filtrar por este canal'}">
+      <td><span class="badge bmuted">${o}</span>${sel?' <span style="color:var(--gold);font-size:9px;letter-spacing:1px;">✕ FILTRADO</span>':''}</td>
       <td>${recs.length}</td>
       <td>${R$(t)}<div class="pb"><div class="pf" style="width:${pct.toFixed(1)}%"></div></div></td>
       <td class="center"><span class="badge bmuted">${N(pct,1)}%</span></td>
