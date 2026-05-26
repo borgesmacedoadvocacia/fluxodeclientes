@@ -916,7 +916,7 @@ function renderMensal(){
     },
     options:{
       ...CHART_BASE,
-      aspectRatio:2.5,
+      aspectRatio:3.5,
       scales:{x:SCALES.x,y:{...SCALES.y,ticks:{...SCALES.y.ticks,callback:v=>'R$'+(v/1000).toFixed(0)+'k'}},y2:{position:'right',ticks:{color:'#4a6080',font:{size:10},stepSize:1},grid:{display:false}}},
       plugins:{...CHART_BASE.plugins,legend:{labels:{color:'#6b82a8',font:{size:10},boxWidth:10}}}
     }
@@ -930,7 +930,7 @@ function renderFaixa(d){
   charts['ch-faixa']=new Chart(document.getElementById('ch-faixa'),{
     type:'bar',
     data:{labels:fx.map(f=>f.l),datasets:[{data:fx.map(f=>d.filter(r=>r.honorarios>=f.min&&r.honorarios<f.max).length),backgroundColor:PAL,borderRadius:4}]},
-    options:{...CHART_BASE,aspectRatio:2.5,plugins:{...CHART_BASE.plugins,legend:{display:false}},scales:{x:SCALES.x,y:{...SCALES.y,ticks:{...SCALES.y.ticks,stepSize:1}}}}
+    options:{...CHART_BASE,aspectRatio:3.5,plugins:{...CHART_BASE.plugins,legend:{display:false}},scales:{x:SCALES.x,y:{...SCALES.y,ticks:{...SCALES.y.ticks,stepSize:1}}}}
   });
 }
 
@@ -943,7 +943,7 @@ function renderParcelas(d){
   charts['ch-parcelas']=new Chart(document.getElementById('ch-parcelas'),{
     type:'bar',
     data:{labels:rows.map(([k])=>k),datasets:[{data:rows.map(([,v])=>v),backgroundColor:PAL,borderRadius:4}]},
-    options:{...CHART_BASE,aspectRatio:2.5,plugins:{...CHART_BASE.plugins,legend:{display:false}},scales:{x:SCALES.x,y:{...SCALES.y,ticks:{...SCALES.y.ticks,stepSize:1}}}}
+    options:{...CHART_BASE,aspectRatio:3.5,plugins:{...CHART_BASE.plugins,legend:{display:false}},scales:{x:SCALES.x,y:{...SCALES.y,ticks:{...SCALES.y.ticks,stepSize:1}}}}
   });
 }
 
@@ -970,6 +970,7 @@ function renderRadar(d){
     data:{labels:['Volume','Faturamento','Ticket','% PJ','Velocidade'],datasets},
     options:{
       ...CHART_BASE,maintainAspectRatio:true,
+      aspectRatio:2,
       scales:{r:{ticks:{display:false,backdropColor:'transparent'},grid:{color:'rgba(26,47,84,0.8)'},pointLabels:{color:'#6b82a8',font:{size:10}},angleLines:{color:'rgba(26,47,84,0.8)'}}}
     }
   });
