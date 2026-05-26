@@ -727,7 +727,7 @@ function renderOrigem(d){
   charts['ch-origem']=new Chart(document.getElementById('ch-origem'),{
     type:'doughnut',
     data:{labels:rows.map(([k])=>k),datasets:[{data:rows.map(([,v])=>v.length),backgroundColor:PAL,borderColor:'#060e1f',borderWidth:2}]},
-    options:{...CHART_BASE,cutout:'62%',scales:undefined,aspectRatio:2}
+    options:{...CHART_BASE,cutout:'62%',scales:undefined,aspectRatio:1.4,plugins:{...CHART_BASE.plugins,legend:{display:false}}}
   });
 }
 
