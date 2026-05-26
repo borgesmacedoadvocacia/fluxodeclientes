@@ -491,7 +491,7 @@ const SHEET_NAME = 'DADOS';
 let allRows   = [];
 const _now    = new Date();
 let selYear   = String(_now.getFullYear());
-let selMonth  = String(_now.getMonth());
+let selMonth  = new Set([String(_now.getMonth())]); // mês atual por padrão
 let selProduto = 'all';
 let selOrigem  = new Set(); // vazio = todos
 let _origensMap = [];
@@ -638,22 +638,32 @@ function buildYearFilter(){
   wrap.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
   const yrBtn=wrap.querySelector(`[data-yr="${selYear}"]`)||wrap.querySelector('[data-yr="all"]');
   if(yrBtn) yrBtn.classList.add('active');
-  // Ativa mês atual
+  // Ativa meses selecionados
   const moWrap=document.getElementById('mo-btns');
   moWrap.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
-  const moBtn=moWrap.querySelector(`[data-mo="${selMonth}"]`)||moWrap.querySelector('[data-mo="all"]');
-  if(moBtn) moBtn.classList.add('active');
+  if(selMonth.size===0){ moWrap.querySelector('[data-mo="all"]').classList.add('active'); }
+  else { selMonth.forEach(m=>{ const b=moWrap.querySelector(`[data-mo="${m}"]`); if(b) b.classList.add('active'); }); }
 }
 function setYear(btn){
   document.querySelectorAll('#yr-btns .fbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); selYear=btn.dataset.yr; selMonth='all';
+  btn.classList.add('active'); selYear=btn.dataset.yr; selMonth=new Set();
   document.querySelectorAll('#mo-btns .fbtn').forEach(b=>b.classList.remove('active'));
   document.querySelector('#mo-btns [data-mo="all"]').classList.add('active');
   render();
 }
 function setMonth(btn){
-  document.querySelectorAll('#mo-btns .fbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); selMonth=btn.dataset.mo;
+  const mo=btn.dataset.mo;
+  const allBtn=document.querySelector('#mo-btns [data-mo="all"]');
+  if(mo==='all'){
+    selMonth=new Set();
+    document.querySelectorAll('#mo-btns .fbtn').forEach(b=>b.classList.remove('active'));
+    allBtn.classList.add('active');
+  } else {
+    allBtn.classList.remove('active');
+    if(selMonth.has(mo)){ selMonth.delete(mo); btn.classList.remove('active'); }
+    else { selMonth.add(mo); btn.classList.add('active'); }
+    if(selMonth.size===0) allBtn.classList.add('active');
+  }
   render();
 }
 function buildProdutoFilter(){
@@ -674,7 +684,7 @@ function setProduto(btn){
 function getDataBase(){
   return allRows.filter(r=>{
     if(selYear!=='all'&&String(r.year)!==selYear) return false;
-    if(selMonth!=='all'&&String(r.month)!==selMonth) return false;
+    if(selMonth.size>0&&!selMonth.has(String(r.month))) return false;
     if(selProduto!=='all'&&r.produto!==selProduto) return false;
     return true;
   });
