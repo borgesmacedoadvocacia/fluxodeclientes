@@ -199,7 +199,7 @@ td.center { text-align: center; }
   border-radius: 6px;
   padding: 22px 16px;
   display: flex; flex-direction: column;
-  align-items: center; text-align: center; gap: 5px;
+  align-items: center; justify-content: center; text-align: center; gap: 5px;
 }
 .cmp-type { font-size: 26px; font-weight: 800; color: var(--gold-l); letter-spacing: 2px; }
 .cmp-cnt  { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
@@ -388,8 +388,8 @@ td.center { text-align: center; }
         <canvas id="ch-pjpf" height="240"></canvas>
       </div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div class="compare-pair" id="pjpf-cards"></div>
+    <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
+      <div class="compare-pair" id="pjpf-cards" style="flex:1;align-items:stretch;"></div>
     </div>
     <div class="tcard">
       <div class="tcard-hdr">Detalhes por Tipo de Pessoa</div>
