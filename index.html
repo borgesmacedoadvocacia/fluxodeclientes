@@ -783,7 +783,7 @@ function renderProduto(d){
       datasets:[{data:rows.map(([,v])=>sum(v,'honorarios')),backgroundColor:PAL,borderRadius:4}]
     },
     options:{
-      ...CHART_BASE,indexAxis:'y',
+      ...CHART_BASE,indexAxis:'y',aspectRatio:2,
       plugins:{...CHART_BASE.plugins,legend:{display:false}},
       scales:{x:{...SCALES.x,ticks:{...SCALES.x.ticks,callback:v=>'R$'+(v/1000).toFixed(0)+'k'}},y:SCALES.y}
     }
