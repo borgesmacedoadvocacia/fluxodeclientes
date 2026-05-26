@@ -332,7 +332,7 @@ td.center { text-align: center; }
   <div class="stitle">KPIs por Origem</div>
   <div class="g64">
     <div class="tcard">
-      <div class="tcard-hdr">Distribuição por Canal <span class="tcnt" id="orig-cnt"></span></div>
+      <div class="tcard-hdr">Distribuição por Canal <div style="display:flex;align-items:center;gap:10px;"><button id="reset-origem-btn" onclick="resetOrigem()" class="reload-btn" style="display:none;padding:3px 10px;font-size:9px;">✕ Limpar seleção</button><span class="tcnt" id="orig-cnt"></span></div></div>
       <table>
         <thead><tr>
           <th>Canal / Origem</th><th>Clientes</th><th>Total Honorários</th><th>% do Total</th>
@@ -690,6 +690,10 @@ function setOrigem(i){
   else selOrigem.add(o);
   render();
 }
+function resetOrigem(){
+  selOrigem=new Set();
+  render();
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  RENDER PRINCIPAL
@@ -748,6 +752,7 @@ function renderOrigem(d){
   const rows=Object.entries(grp).sort((a,b)=>sum(b[1],'honorarios')-sum(a[1],'honorarios'));
   const totH=sum(d,'honorarios');
   document.getElementById('orig-cnt').textContent=rows.length+' canais';
+  document.getElementById('reset-origem-btn').style.display=selOrigem.size>0?'inline-block':'none';
   _origensMap=rows.map(([k])=>k);
   document.getElementById('tbody-origem').innerHTML=rows.map(([o,recs],i)=>{
     const t=sum(recs,'honorarios'), pct=totH?t/totH*100:0;
