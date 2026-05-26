@@ -487,8 +487,9 @@ const SHEET_NAME = 'DADOS';
 //  STATE
 // ═══════════════════════════════════════════════════════════════════════════
 let allRows   = [];
-let selYear   = 'all';
-let selMonth  = 'all';
+const _now    = new Date();
+let selYear   = String(_now.getFullYear());
+let selMonth  = String(_now.getMonth());
 let selProduto = 'all';
 let selOrigem  = new Set(); // vazio = todos
 let _origensMap = [];
@@ -631,6 +632,15 @@ function buildYearFilter(){
     b.className='fbtn'; b.dataset.yr=y; b.textContent=y;
     b.onclick=()=>setYear(b); wrap.appendChild(b);
   });
+  // Ativa ano atual
+  wrap.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  const yrBtn=wrap.querySelector(`[data-yr="${selYear}"]`)||wrap.querySelector('[data-yr="all"]');
+  if(yrBtn) yrBtn.classList.add('active');
+  // Ativa mês atual
+  const moWrap=document.getElementById('mo-btns');
+  moWrap.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  const moBtn=moWrap.querySelector(`[data-mo="${selMonth}"]`)||moWrap.querySelector('[data-mo="all"]');
+  if(moBtn) moBtn.classList.add('active');
 }
 function setYear(btn){
   document.querySelectorAll('#yr-btns .fbtn').forEach(b=>b.classList.remove('active'));
