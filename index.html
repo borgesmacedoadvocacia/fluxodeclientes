@@ -308,6 +308,12 @@ td.center { text-align: center; }
       <button class="fbtn" data-mo="11" onclick="setMonth(this)">Dez</button>
     </div>
   </div>
+  <div class="filter-group" id="prod-group">
+    <span class="filter-label">Produto</span>
+    <div id="prod-btns" style="display:flex;gap:5px;flex-wrap:wrap;">
+      <button class="fbtn active" data-prod="all" onclick="setProduto(this)">Todos</button>
+    </div>
+  </div>
 </div>
 
 <!-- CONTENT -->
@@ -468,6 +474,7 @@ const SHEET_NAME = 'DADOS';
 let allRows   = [];
 let selYear   = 'all';
 let selMonth  = 'all';
+let selProduto = 'all';
 const charts  = {};
 
 const MES_NOME = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -576,6 +583,7 @@ async function loadData(){
     const now=new Date();
     setStatus('live','Dados ao vivo — '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}));
     buildYearFilter();
+    buildProdutoFilter();
     render();
   } catch(e){
     console.error(e);
@@ -619,10 +627,26 @@ function setMonth(btn){
   btn.classList.add('active'); selMonth=btn.dataset.mo;
   render();
 }
+function buildProdutoFilter(){
+  const produtos=[...new Set(allRows.map(r=>r.produto).filter(Boolean))].sort();
+  const wrap=document.getElementById('prod-btns');
+  wrap.querySelectorAll('[data-prod]:not([data-prod="all"])').forEach(b=>b.remove());
+  produtos.forEach(p=>{
+    const b=document.createElement('button');
+    b.className='fbtn'; b.dataset.prod=p; b.textContent=p.length>30?p.slice(0,28)+'…':p;
+    b.title=p; b.onclick=()=>setProduto(b); wrap.appendChild(b);
+  });
+}
+function setProduto(btn){
+  document.querySelectorAll('#prod-btns .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); selProduto=btn.dataset.prod;
+  render();
+}
 function getData(){
   return allRows.filter(r=>{
     if(selYear!=='all'&&String(r.year)!==selYear) return false;
     if(selMonth!=='all'&&String(r.month)!==selMonth) return false;
+    if(selProduto!=='all'&&r.produto!==selProduto) return false;
     return true;
   });
 }
@@ -865,7 +889,11 @@ function renderSDR(d){
 // ── MENSAL (usa allRows para série histórica completa) ───────────────────
 function renderMensal(){
   const byYM={};
-  const src=selYear==='all'?allRows:allRows.filter(r=>String(r.year)===selYear);
+  const src=allRows.filter(r=>{
+    if(selYear!=='all'&&String(r.year)!==selYear) return false;
+    if(selProduto!=='all'&&r.produto!==selProduto) return false;
+    return true;
+  });
   src.forEach(r=>{
     if(!r.dt)return;
     const key=`${r.year}-${String(r.month).padStart(2,'0')}`;
