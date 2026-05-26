@@ -659,14 +659,18 @@ function setProduto(btn){
   btn.classList.add('active'); selProduto=btn.dataset.prod;
   render();
 }
-function getData(){
+function getDataBase(){
   return allRows.filter(r=>{
     if(selYear!=='all'&&String(r.year)!==selYear) return false;
     if(selMonth!=='all'&&String(r.month)!==selMonth) return false;
     if(selProduto!=='all'&&r.produto!==selProduto) return false;
-    if(selOrigem.size>0&&!selOrigem.has(r.origem)) return false;
     return true;
   });
+}
+function getData(){
+  const base=getDataBase();
+  if(selOrigem.size===0) return base;
+  return base.filter(r=>selOrigem.has(r.origem));
 }
 function setOrigem(i){
   const o=_origensMap[i];
@@ -685,7 +689,7 @@ function render(){
     :MES_NOME[+selMonth]+(selYear!=='all'?' / '+selYear:'');
   document.getElementById('footer-period').textContent=periodLabel;
   renderGeral(d);
-  renderOrigem(d);
+  renderOrigem(getDataBase());
   renderPagamento(d);
   renderProduto(d);
   renderPJPF(d);
