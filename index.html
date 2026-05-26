@@ -826,7 +826,7 @@ function renderPJPF(d){
   charts['ch-pjpf']=new Chart(document.getElementById('ch-pjpf'),{
     type:'doughnut',
     data:{labels:typeData.map(x=>x.t),datasets:[{data:typeData.map(x=>x.recs.length),backgroundColor:[P.gold,P.wh,P.gr],borderColor:'#060e1f',borderWidth:3}]},
-    options:{...CHART_BASE,cutout:'58%',scales:undefined,plugins:{...CHART_BASE.plugins,legend:{position:'bottom',labels:{color:'#6b82a8',font:{size:11}}}}}
+    options:{...CHART_BASE,cutout:'58%',scales:undefined,aspectRatio:1.3,plugins:{...CHART_BASE.plugins,legend:{position:'bottom',labels:{color:'#6b82a8',font:{size:11}}}}}
   });
 }
 
