@@ -490,7 +490,7 @@ let allRows   = [];
 let selYear   = 'all';
 let selMonth  = 'all';
 let selProduto = 'all';
-let selOrigem  = 'all';
+let selOrigem  = new Set(); // vazio = todos
 let _origensMap = [];
 const charts  = {};
 
@@ -664,13 +664,14 @@ function getData(){
     if(selYear!=='all'&&String(r.year)!==selYear) return false;
     if(selMonth!=='all'&&String(r.month)!==selMonth) return false;
     if(selProduto!=='all'&&r.produto!==selProduto) return false;
-    if(selOrigem!=='all'&&r.origem!==selOrigem) return false;
+    if(selOrigem.size>0&&!selOrigem.has(r.origem)) return false;
     return true;
   });
 }
 function setOrigem(i){
   const o=_origensMap[i];
-  selOrigem=(selOrigem===o)?'all':o;
+  if(selOrigem.has(o)) selOrigem.delete(o);
+  else selOrigem.add(o);
   render();
 }
 
@@ -736,9 +737,9 @@ function renderOrigem(d){
     const t=sum(recs,'honorarios'), pct=totH?t/totH*100:0;
     const dfArr=recs.filter(r=>r.diasFechar>0);
     const conf=recs.filter(r=>r.confirmado&&r.confirmado.toLowerCase().includes('sim')).length;
-    const sel=selOrigem===o;
-    return`<tr class="tr-clickable${sel?' tr-sel':''}" onclick="setOrigem(${i})" title="${sel?'Clique para remover filtro':'Clique para filtrar por este canal'}">
-      <td><span class="badge bmuted">${o}</span>${sel?' <span style="color:var(--gold);font-size:9px;letter-spacing:1px;">✕ FILTRADO</span>':''}</td>
+    const sel=selOrigem.has(o);
+    return`<tr class="tr-clickable${sel?' tr-sel':''}" onclick="setOrigem(${i})" title="${sel?'Clique para remover seleção':'Clique para adicionar ao filtro'}">
+      <td><span class="badge bmuted">${o}</span>${sel?' <span style="color:var(--gold);font-size:9px;letter-spacing:1px;">✓</span>':''}</td>
       <td>${recs.length}</td>
       <td>${R$(t)}<div class="pb"><div class="pf" style="width:${pct.toFixed(1)}%"></div></div></td>
       <td class="center"><span class="badge bmuted">${N(pct,1)}%</span></td>
