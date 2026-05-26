@@ -703,7 +703,7 @@ function renderOrigem(d){
   charts['ch-origem']=new Chart(document.getElementById('ch-origem'),{
     type:'doughnut',
     data:{labels:rows.map(([k])=>k),datasets:[{data:rows.map(([,v])=>v.length),backgroundColor:PAL,borderColor:'#060e1f',borderWidth:2}]},
-    options:{...CHART_BASE,cutout:'62%',scales:undefined}
+    options:{...CHART_BASE,cutout:'62%',scales:undefined,aspectRatio:2}
   });
 }
 
@@ -726,7 +726,7 @@ function renderPagamento(d){
   charts['ch-pag']=new Chart(document.getElementById('ch-pag'),{
     type:'doughnut',
     data:{labels:rows.map(([k])=>k),datasets:[{data:rows.map(([,v])=>v.length),backgroundColor:PAL,borderColor:'#060e1f',borderWidth:2}]},
-    options:{...CHART_BASE,cutout:'60%',scales:undefined}
+    options:{...CHART_BASE,cutout:'60%',scales:undefined,aspectRatio:2}
   });
 }
 
